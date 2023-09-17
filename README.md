@@ -231,17 +231,30 @@ $development: {
 //
 },
 
-## Needed to add PNPM_FLAGS ENVIRONMENT VARIABLE on NETLIFY
+---
 
-PNPM_FLAGS = --shamefully-hoist
-NPM_FLAGS = --prefix=/
+# There was an issue with SSR + Nuxt 3 + Apollo & "unable to find the #internal/nitro module"
 
-## Added Prebuild to package.json
+## Package import specifier "#internal/nitro" is not defined in package #13952
 
-https://answers.netlify.com/t/using-pnpm-and-pnpm-workspaces/2759
-"prebuild": "[[$CI = true]] && npx pnpm@3 install -r --store=node_modules/.pnpm-store || echo skiping pnpm install"
+https://github.com/nuxt/nuxt/issues/13801
 
+Closed
+@danielroe danielroe changed the title npm run generate does not work with the quick start example app package import specifier "#internal/nitro" is not defined in package when running npm run generate on windows on May 10, 2022
 
-# There is an issue with SSR + Nuxt 3 + Apollo.
+concurrent run of npm run build  and npm run dev cause this issue.
+
+you can delete your .nuxt folder then run either of the two command.
+
+Kindly avoid the running the two commands at the same time
+
 https://nuxt.com/docs/getting-started/deployment
-I think you need to Pre-Render.
+
+Had to run:
+`npx nuxi generate`
+
+I think you need to Pre-Render and configure some things for `nitro` as well.
+
+I tried to run `pnpm` commands, but it didn't work so I just went with `npm`
+
+Ultimately, I ran `npx nuxi generate` and after `npm run build --prerender`
